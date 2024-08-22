@@ -24,13 +24,13 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        app.post("/register", this::registerHandler);
-        app.post("/login", this::loginHandler);
+        app.post("/register", this::postRegisterHandler);
+        app.post("/login", this::postLoginHandler);
 
         return app;
     }
 
-    private void registerHandler(Context context) throws JsonProcessingException {
+    private void postRegisterHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = context.body();
         Account account = mapper.readValue(jsonString, Account.class);
@@ -43,7 +43,7 @@ public class SocialMediaController {
         }
     }
 
-    private void loginHandler(Context context) throws JsonProcessingException {
+    private void postLoginHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = context.body();
         Account account = mapper.readValue(jsonString, Account.class);
