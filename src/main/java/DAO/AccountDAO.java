@@ -35,7 +35,7 @@ public class AccountDAO {
     public Account getAccountByUserName(String username) {
         Connection conn = ConnectionUtil.getConnection();
         try {
-            String sql = "";
+            String sql = "SELECT * FROM account WHERE username = ?;";
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, username);
