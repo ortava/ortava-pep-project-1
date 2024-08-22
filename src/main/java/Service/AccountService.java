@@ -19,4 +19,15 @@ public class AccountService {
             return null;
         }
     }
+
+    public Account login(Account account) {
+        Account existing = accountDAO.getAccountByUserName(account.getUsername());
+        if(existing != null
+        && account.getUsername().equals(existing.getUsername())
+        && account.getPassword().equals(existing.getPassword())) {
+            return existing;
+        } else {
+            return null;
+        }
+    }
 }
