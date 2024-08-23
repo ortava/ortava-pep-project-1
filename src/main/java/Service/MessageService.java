@@ -44,4 +44,17 @@ public class MessageService {
             return null;
         }
     }
+
+    public Message updateMessageTextByMessageId(int id, String messageText) {
+        if(!messageText.isBlank()
+        && messageText.length() <= 255) {
+            if(messageDAO.updateMessageTextByMessageId(id, messageText) == 1) {
+                return messageDAO.getMessageByMessageId(id);
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
 }
