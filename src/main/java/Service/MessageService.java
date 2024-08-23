@@ -30,4 +30,9 @@ public class MessageService {
     public List<Message> getAllMessages() {
         return messageDAO.getAllMessages();
     }
+
+    // TODO: Same problem - identical method names in different classes.
+    public Message getMessageByMessageId(int id) {
+        return messageDAO.getMessageByMessageId(id);
+    }
 }
