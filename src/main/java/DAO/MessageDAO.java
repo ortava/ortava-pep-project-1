@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import Model.Message;
 import Util.ConnectionUtil;
@@ -35,5 +37,27 @@ public class MessageDAO {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    public List<Message> getAllMessages() {
+        List<Message> messages = new ArrayList<>();
+        Connection conn = ConnectionUtil.getConnection();
+        try {
+            String sql = "SELECT * FROM message;";
+
+            PreparedStatement ps = conn.prepareStatement(sql); // TODO: Ask - Should I use a regular Statement instead?
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                messages.add(new Message(
+                    rs.getInt("message_id"),
+                    rs.getInt("posted_by"),
+                    rs.getString("message_text"), 
+                    rs.getLong("time_posted_epoch")
+                    ));
+            }
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return messages;
     }
 }

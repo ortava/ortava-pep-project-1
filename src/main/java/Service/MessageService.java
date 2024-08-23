@@ -1,5 +1,7 @@
 package Service;
 
+import java.util.List;
+
 import DAO.AccountDAO;
 import DAO.MessageDAO;
 import Model.Message;
@@ -21,5 +23,11 @@ public class MessageService {
         } else {
             return null;
         }
-    }    
+    }
+    
+    // TODO: Ask - Common method names in different classes... recommendations on different names?
+    // (retrieveAllMessages)?
+    public List<Message> getAllMessages() {
+        return messageDAO.getAllMessages();
+    }
 }
