@@ -45,7 +45,7 @@ public class MessageDAO {
         try {
             String sql = "SELECT * FROM message;";
 
-            PreparedStatement ps = conn.prepareStatement(sql); // TODO: Ask - Should I use a regular Statement instead?
+            PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 messages.add(new Message(

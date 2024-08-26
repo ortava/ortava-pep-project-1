@@ -8,7 +8,7 @@ import Model.Message;
 
 public class MessageService {
     private MessageDAO messageDAO;
-    private AccountDAO accountDAO; // TODO: Ask - Should I avoid including an AccountDAO in the MessageService?
+    private AccountDAO accountDAO;
 
     public MessageService() {
         messageDAO = new MessageDAO();
@@ -25,13 +25,10 @@ public class MessageService {
         }
     }
     
-    // TODO: Ask - Common method names in different classes... recommendations on different names?
-    // (retrieveAllMessages)?
     public List<Message> getAllMessages() {
         return messageDAO.getAllMessages();
     }
 
-    // TODO: Same problem - identical method names in different classes.
     public Message getMessageByMessageId(int id) {
         return messageDAO.getMessageByMessageId(id);
     }

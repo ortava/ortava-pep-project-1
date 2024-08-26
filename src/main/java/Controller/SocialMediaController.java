@@ -1,7 +1,6 @@
 package Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.Account;
@@ -11,11 +10,6 @@ import Service.MessageService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-/**
- * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
- * found in readme.md as well as the test cases. You should
- * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
- */
 public class SocialMediaController {
     AccountService accountService = new AccountService();
     MessageService messageService = new MessageService();
@@ -110,7 +104,6 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
 
         String jsonString = context.body();
-        //String messageText = mapper.readValue(jsonString, String.class);
         String messageText = mapper.readTree(jsonString).get("message_text").asText();
 
         Message updatedMessage = messageService.updateMessageTextByMessageId(id, messageText);
