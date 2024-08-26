@@ -15,13 +15,14 @@ public class MessageDAO {
     public Message insertMessage(Message message) {
         Connection conn = ConnectionUtil.getConnection();
         try {
-            String sql = "INSERT INTO message (posted_by, message_text, time_posted_epoch) VALUES (?, ?, ?);";
+            String sql = "INSERT INTO message "
+                        + "(posted_by, message_text, time_posted_epoch) "
+                        + "VALUES (?, ?, ?);";
 
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, message.getPosted_by());
             ps.setString(2, message.getMessage_text());
             ps.setLong(3, message.getTime_posted_epoch());
-            
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()) {
@@ -34,7 +35,7 @@ public class MessageDAO {
                     );
             }            
         } catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -56,7 +57,7 @@ public class MessageDAO {
                     ));
             }
         } catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return messages;
     }
@@ -78,7 +79,7 @@ public class MessageDAO {
                     );
             }
         } catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -92,7 +93,7 @@ public class MessageDAO {
             ps.setInt(1, id);
             return ps.executeUpdate();
         } catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return 0;
     }
@@ -107,7 +108,7 @@ public class MessageDAO {
             ps.setInt(2, id);
             return ps.executeUpdate();
         } catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return 0;
     }
@@ -116,7 +117,9 @@ public class MessageDAO {
         List<Message> messages = new ArrayList<>();
         Connection conn = ConnectionUtil.getConnection();
         try {
-            String sql = "SELECT message_id, posted_by, message_text, time_posted_epoch FROM message INNER JOIN account ON posted_by = account_id WHERE account_id = ?;";
+            String sql = "SELECT message_id, posted_by, message_text, time_posted_epoch "
+                        + "FROM message INNER JOIN account ON posted_by = account_id "
+                        + "WHERE account_id = ?;";
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
@@ -130,7 +133,7 @@ public class MessageDAO {
                     ));
             }
         } catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return messages;
     }

@@ -11,8 +11,15 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 public class SocialMediaController {
-    AccountService accountService = new AccountService();
-    MessageService messageService = new MessageService();
+    AccountService accountService;
+    MessageService messageService;
+    ObjectMapper mapper;
+
+    public SocialMediaController() {
+        accountService = new AccountService();
+        messageService = new MessageService();
+        mapper = new ObjectMapper();
+    }
 
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
@@ -34,90 +41,70 @@ public class SocialMediaController {
     }
 
     private void postRegisterHandler(Context context) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = context.body();
-        Account account = mapper.readValue(jsonString, Account.class);
+        Account account = mapper.readValue(context.body(), Account.class);
         Account registered = accountService.registerAccount(account);
-        if(registered == null) {
-            context.status(400);
-        } else {
+        if(registered != null) {
             context.json(mapper.writeValueAsString(registered));
-            context.status(200);
+        } else {
+            context.status(400);
         }
     }
 
     private void postLoginHandler(Context context) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = context.body();
-        Account account = mapper.readValue(jsonString, Account.class);
+        Account account = mapper.readValue(context.body(), Account.class);
         Account existing = accountService.login(account);
-        if(existing == null) {
-            context.status(401);
-        } else {
+        if(existing != null) {
             context.json(mapper.writeValueAsString(existing));
-            context.status(200);
+        } else {
+            context.status(401);
         }
     }
 
     private void postMessageHandler(Context context) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = context.body();
-        Message message = mapper.readValue(jsonString, Message.class);
+        Message message = mapper.readValue(context.body(), Message.class);
         Message postedMessage = messageService.addMessage(message);
-        if(postedMessage == null) {
-            context.status(400);
-        } else {
+        if(postedMessage != null) {
             context.json(mapper.writeValueAsString(postedMessage));
-            context.status(200);
+        } else {
+            context.status(400);
         }
     }
 
     private void getAllMessagesHandler(Context context) {
         context.json(messageService.getAllMessages());
-        context.status(200);
     }
 
     private void getMessageByMessageId(Context context) {
         int id = Integer.parseInt(context.pathParam("message_id"));
         Message message = messageService.getMessageByMessageId(id);
-        if(message == null) {
-            context.status(200);
-        } else {
+        if(message != null) {
             context.json(message);
-            context.status(200);
         }
     }
 
     private void deleteMessageByMessageId(Context context) {
         int id = Integer.parseInt(context.pathParam("message_id"));
         Message message = messageService.removeMessageByMessageId(id);
-        if(message == null) {
-            context.status(200);
-        } else {
+        if(message != null) {
             context.json(message);
-            context.status(200);
         }
     }
 
     private void patchMessageTextByMessageId(Context context) throws JsonProcessingException {
+        String messageText = mapper.readTree(context.body())
+                                    .get("message_text")
+                                    .asText();
         int id = Integer.parseInt(context.pathParam("message_id"));
-        ObjectMapper mapper = new ObjectMapper();
-
-        String jsonString = context.body();
-        String messageText = mapper.readTree(jsonString).get("message_text").asText();
-
         Message updatedMessage = messageService.updateMessageTextByMessageId(id, messageText);
-        if(updatedMessage == null) {
-            context.status(400);
-        } else {
+        if(updatedMessage != null) {
             context.json(updatedMessage);
-            context.status(200);
+        } else {
+            context.status(400);
         }
     }
 
     private void getAllMessagesByAccountId(Context context) {
         int id = Integer.parseInt(context.pathParam("account_id"));
         context.json(messageService.getAllMessagesByAccountId(id));
-        context.status(200);
     }
 }
