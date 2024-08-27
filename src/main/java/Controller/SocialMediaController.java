@@ -40,6 +40,12 @@ public class SocialMediaController {
         return app;
     }
 
+    /** 
+     * Requirement #1
+     * Handler to register a new account.
+     * @param context handles information from HTTP requests and generates responses within Javalin
+     * @throws JsonProcessingException if there is an issue converting JSON into an object.
+     */
     private void postRegisterAccountHandler(Context context) throws JsonProcessingException {
         Account account = mapper.readValue(context.body(), Account.class);
         Account registeredAccount = accountService.registerAccount(account);
@@ -50,6 +56,12 @@ public class SocialMediaController {
         }
     }
 
+    /** 
+     * Requirement #2
+     * Handler to process user logins.
+     * @param context handles information from HTTP requests and generates responses within Javalin
+     * @throws JsonProcessingException if there is an issue converting JSON into an object.
+     */
     private void postLoginHandler(Context context) throws JsonProcessingException {
         Account account = mapper.readValue(context.body(), Account.class);
         Account existingAccount = accountService.login(account);
@@ -60,6 +72,12 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * Requirement #3
+     * Handler to create a new message.
+     * @param context handles information from HTTP requests and generates responses within Javalin
+     * @throws JsonProcessingException if there is an issue converting JSON into an object.
+     */
     private void postCreateMessageHandler(Context context) throws JsonProcessingException {
         Message message = mapper.readValue(context.body(), Message.class);
         Message postedMessage = messageService.addMessage(message);
@@ -70,10 +88,20 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * Requirement #4
+     * Handler to get all messages.
+     * @param context handles information from HTTP requests and generates responses within Javalin
+     */
     private void getAllMessagesHandler(Context context) {
         context.json(messageService.getAllMessages());
     }
 
+    /**
+     * Requirement #5
+     * Handler to get a message identified by its message_id.
+     * @param context handles information from HTTP requests and generates responses within Javalin
+     */
     private void getMessageByMessageId(Context context) {
         int messageId = Integer.parseInt(context.pathParam("message_id"));
         Message message = messageService.getMessage(messageId);
@@ -82,6 +110,11 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * Requirement #6
+     * Handler to delete a message identified by its message_id.
+     * @param context handles information from HTTP requests and generates responses within Javalin
+     */
     private void deleteMessageByMessageId(Context context) {
         int messageId = Integer.parseInt(context.pathParam("message_id"));
         Message message = messageService.removeMessage(messageId);
@@ -90,6 +123,12 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * Requirement #7
+     * Handler to update a message text identified by its message_id.
+     * @param context handles information from HTTP requests and generates responses within Javalin
+     * @throws JsonProcessingException if there is an issue converting JSON into an object.
+     */
     private void patchMessageTextByMessageId(Context context) throws JsonProcessingException {
         String messageText = mapper.readTree(context.body())
                                     .get("message_text")
@@ -103,6 +142,11 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * Requirement #8
+     * Handler to get all messages by a particular user identified by their account_id.
+     * @param context handles information from HTTP requests and generates responses within Javalin
+     */
     private void getAllMessagesByAccountId(Context context) {
         int accountId = Integer.parseInt(context.pathParam("account_id"));
         context.json(messageService.getAllMessagesByAccount(accountId));

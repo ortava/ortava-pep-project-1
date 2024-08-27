@@ -12,6 +12,10 @@ import Util.ConnectionUtil;
 
 
 public class AccountDAO {
+    /**
+     * @param account The new account to be added to the database (not including account_id).
+     * @return The newly added account (including account_id). Return null if account could not be inserted.
+     */
     public Account insertAccount(Account account) {
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement ps = null;
@@ -39,6 +43,10 @@ public class AccountDAO {
         return null;
     }
 
+    /**
+     * @param username The username of the account to be retrieved.
+     * @return The account with the given username. Return null if there is no matching account.
+     */
     public Account getAccountByUserName(String username) {
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement ps = null;
@@ -62,6 +70,10 @@ public class AccountDAO {
         return null;
     }
 
+    /**
+     * @param accountId The ID of the account to be retrieved.
+     * @return The account with the given ID. Return null if there is no matching account.
+     */
     public Account getAccountByAccountId(int accountId) {
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement ps = null;

@@ -13,6 +13,10 @@ import Util.CloseUtil;
 import Util.ConnectionUtil;
 
 public class MessageDAO {
+    /**
+     * @param message The new message to be added (not including message_id).
+     * @return The newly added message with its generated message_id. Return null if message could not be inserted.
+     */
     public Message insertMessage(Message message) {
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement ps = null;
@@ -48,6 +52,9 @@ public class MessageDAO {
         return null;
     }
 
+    /**
+     * @return A list of all the message in the database.
+     */
     public List<Message> getAllMessages() {
         List<Message> messages = new ArrayList<>();
         Connection conn = ConnectionUtil.getConnection();
@@ -76,6 +83,10 @@ public class MessageDAO {
         return messages;
     }
 
+    /**
+     * @param messageId The ID of the message to be retrieved from the database.
+     * @return The identified message. Return null if there is no matching message.
+     */
     public Message getMessage(int messageId) {
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement ps = null;
@@ -104,6 +115,11 @@ public class MessageDAO {
         return null;
     }
 
+    /**
+     * @param messageId The ID of the message to be deleted from the database.
+     * @return The number of rows affected by the delete operation.
+     * Should be 1 if successful, 0 if no deletion occurred.
+     */
     public int deleteMessageByMessageId(int messageId) {
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement ps = null;
@@ -122,6 +138,12 @@ public class MessageDAO {
         return 0;
     }
 
+    /**
+     * @param messageId The ID of the message to be updated.
+     * @param messageText The new message text.
+     * @return The number of rows affected by the update operation.
+     * Should be 1 if successful, 0 if no update occurred.
+     */
     public int updateMessageText(int messageId, String messageText) {
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement ps = null;
@@ -141,6 +163,10 @@ public class MessageDAO {
         return 0;
     }
 
+    /**
+     * @param accountId The ID of the account who's messages will be retrieved from the database.
+     * @return A list of messages authored by the account with the given ID.
+     */
     public List<Message> getAllMessagesByAccount(int accountId) {
         List<Message> messages = new ArrayList<>();
         Connection conn = ConnectionUtil.getConnection();
