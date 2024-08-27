@@ -21,11 +21,11 @@ public class AccountService {
     }
 
     public Account login(Account account) {
-        Account existing = accountDAO.getAccountByUserName(account.getUsername());
-        if(existing != null
-        && account.getUsername().equals(existing.getUsername())
-        && account.getPassword().equals(existing.getPassword())) {
-            return existing;
+        Account existingAccount = accountDAO.getAccountByUserName(account.getUsername());
+        if(existingAccount != null
+        && account.getUsername().equals(existingAccount.getUsername())
+        && account.getPassword().equals(existingAccount.getPassword())) {
+            return existingAccount;
         } else {
             return null;
         }

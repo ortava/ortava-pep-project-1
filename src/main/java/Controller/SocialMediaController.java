@@ -28,9 +28,9 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        app.post("/register", this::postRegisterHandler);
+        app.post("/register", this::postRegisterAccountHandler);
         app.post("/login", this::postLoginHandler);
-        app.post("/messages", this::postMessageHandler);
+        app.post("/messages", this::postCreateMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageByMessageId);
         app.delete("/messages/{message_id}", this::deleteMessageByMessageId);
@@ -40,11 +40,11 @@ public class SocialMediaController {
         return app;
     }
 
-    private void postRegisterHandler(Context context) throws JsonProcessingException {
+    private void postRegisterAccountHandler(Context context) throws JsonProcessingException {
         Account account = mapper.readValue(context.body(), Account.class);
-        Account registered = accountService.registerAccount(account);
-        if(registered != null) {
-            context.json(mapper.writeValueAsString(registered));
+        Account registeredAccount = accountService.registerAccount(account);
+        if(registeredAccount != null) {
+            context.json(mapper.writeValueAsString(registeredAccount));
         } else {
             context.status(400);
         }
@@ -52,15 +52,15 @@ public class SocialMediaController {
 
     private void postLoginHandler(Context context) throws JsonProcessingException {
         Account account = mapper.readValue(context.body(), Account.class);
-        Account existing = accountService.login(account);
-        if(existing != null) {
-            context.json(mapper.writeValueAsString(existing));
+        Account existingAccount = accountService.login(account);
+        if(existingAccount != null) {
+            context.json(mapper.writeValueAsString(existingAccount));
         } else {
             context.status(401);
         }
     }
 
-    private void postMessageHandler(Context context) throws JsonProcessingException {
+    private void postCreateMessageHandler(Context context) throws JsonProcessingException {
         Message message = mapper.readValue(context.body(), Message.class);
         Message postedMessage = messageService.addMessage(message);
         if(postedMessage != null) {
@@ -75,16 +75,16 @@ public class SocialMediaController {
     }
 
     private void getMessageByMessageId(Context context) {
-        int id = Integer.parseInt(context.pathParam("message_id"));
-        Message message = messageService.getMessageByMessageId(id);
+        int messageId = Integer.parseInt(context.pathParam("message_id"));
+        Message message = messageService.getMessage(messageId);
         if(message != null) {
             context.json(message);
         }
     }
 
     private void deleteMessageByMessageId(Context context) {
-        int id = Integer.parseInt(context.pathParam("message_id"));
-        Message message = messageService.removeMessageByMessageId(id);
+        int messageId = Integer.parseInt(context.pathParam("message_id"));
+        Message message = messageService.removeMessage(messageId);
         if(message != null) {
             context.json(message);
         }
@@ -94,8 +94,8 @@ public class SocialMediaController {
         String messageText = mapper.readTree(context.body())
                                     .get("message_text")
                                     .asText();
-        int id = Integer.parseInt(context.pathParam("message_id"));
-        Message updatedMessage = messageService.updateMessageTextByMessageId(id, messageText);
+        int messageId = Integer.parseInt(context.pathParam("message_id"));
+        Message updatedMessage = messageService.updateMessageText(messageId, messageText);
         if(updatedMessage != null) {
             context.json(updatedMessage);
         } else {
@@ -104,7 +104,7 @@ public class SocialMediaController {
     }
 
     private void getAllMessagesByAccountId(Context context) {
-        int id = Integer.parseInt(context.pathParam("account_id"));
-        context.json(messageService.getAllMessagesByAccountId(id));
+        int accountId = Integer.parseInt(context.pathParam("account_id"));
+        context.json(messageService.getAllMessagesByAccount(accountId));
     }
 }

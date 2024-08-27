@@ -18,7 +18,7 @@ public class MessageService {
     public Message addMessage(Message message) {
         if(!message.getMessage_text().isBlank()
         && message.getMessage_text().length() <= 255
-        && accountDAO.getAccountById(message.getPosted_by()) != null) {
+        && accountDAO.getAccountByAccountId(message.getPosted_by()) != null) {
             return messageDAO.insertMessage(message);
         } else {
             return null;
@@ -29,30 +29,30 @@ public class MessageService {
         return messageDAO.getAllMessages();
     }
 
-    public Message getMessageByMessageId(int id) {
-        return messageDAO.getMessageByMessageId(id);
+    public Message getMessage(int messageId) {
+        return messageDAO.getMessage(messageId);
     }
 
-    public Message removeMessageByMessageId(int id) {
-        Message deletedMessage = getMessageByMessageId(id);
-        if(messageDAO.deleteMessageByMessageId(id) == 1) {
+    public Message removeMessage(int messageId) {
+        Message deletedMessage = getMessage(messageId);
+        if(messageDAO.deleteMessageByMessageId(messageId) == 1) {
             return deletedMessage;
         } else {
             return null;
         }
     }
 
-    public Message updateMessageTextByMessageId(int id, String messageText) {
+    public Message updateMessageText(int messageId, String messageText) {
         if(!messageText.isBlank()
         && messageText.length() <= 255
-        && messageDAO.updateMessageTextByMessageId(id, messageText) == 1) {
-            return messageDAO.getMessageByMessageId(id);
+        && messageDAO.updateMessageText(messageId, messageText) == 1) {
+            return messageDAO.getMessage(messageId);
         } else {
             return null;
         }
     }
 
-    public List<Message> getAllMessagesByAccountId(int id) {
-        return messageDAO.getAllMessagesByAccountId(id);
+    public List<Message> getAllMessagesByAccount(int accountId) {
+        return messageDAO.getAllMessagesByAccount(accountId);
     }
 }

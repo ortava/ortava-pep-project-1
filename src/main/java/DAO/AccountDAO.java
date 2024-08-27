@@ -21,7 +21,7 @@ public class AccountDAO {
             ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
-            
+
             ps.executeUpdate();
 
             rs = ps.getGeneratedKeys();
@@ -62,14 +62,14 @@ public class AccountDAO {
         return null;
     }
 
-    public Account getAccountById(int id) {
+    public Account getAccountByAccountId(int accountId) {
         Connection conn = ConnectionUtil.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             String sql = "SELECT * FROM account WHERE account_id = ?;";
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setInt(1, accountId);
 
             rs = ps.executeQuery();
             if(rs.next()) {
